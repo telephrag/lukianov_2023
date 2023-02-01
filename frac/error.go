@@ -1,4 +1,4 @@
-package ratfrac
+package frac
 
 import (
 	"errors"

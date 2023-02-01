@@ -1,15 +1,16 @@
-package ratfrac
+package frac
 
 import (
 	"fmt"
 )
 
 var (
-	SIGN_NEG = -1
-	SIGN_POS = 1
+	NEG  = -1
+	POS  = 1
+	NULL = New(0, 1, POS)
 )
 
-type RatFrac struct {
+type Frac struct {
 	sign int
 	num  uint64
 	den  uint64
@@ -17,8 +18,8 @@ type RatFrac struct {
 	Err error
 }
 
-func New(num, den uint64, sign int) *RatFrac {
-	rf := &RatFrac{}
+func New(num, den uint64, sign int) *Frac {
+	rf := &Frac{}
 	rf.num = num
 	rf.den = den
 	if den == 0 {
@@ -28,8 +29,8 @@ func New(num, den uint64, sign int) *RatFrac {
 	return rf
 }
 
-func (rf *RatFrac) Copy() (other *RatFrac) {
-	return &RatFrac{
+func (rf *Frac) Copy() (other *Frac) {
+	return &Frac{
 		sign: rf.sign,
 		num:  rf.num,
 		den:  rf.den,
@@ -37,7 +38,7 @@ func (rf *RatFrac) Copy() (other *RatFrac) {
 	}
 }
 
-func (rf *RatFrac) Simplify() (self *RatFrac) {
+func (rf *Frac) Simplify() (self *Frac) {
 	if rf.Err != nil {
 		return rf
 	}
@@ -53,20 +54,23 @@ func (rf *RatFrac) Simplify() (self *RatFrac) {
 	return rf
 }
 
-func (rf *RatFrac) Equals(other *RatFrac) bool {
+func (rf *Frac) Equals(other *Frac) bool {
 	if rf.sign != other.sign {
+		return false
+	}
+
+	// null check cause, we use division later
+	rn, on := rf.num == 0, other.num == 0
+	if rn && on {
+		return true
+	} else if rn || on {
 		return false
 	}
 
 	n := rf.num >= other.num
 	d := rf.den >= other.den
-
-	if rf.num == 0 && other.num == 0 {
-		return true
-	}
-
 	if n && d {
-		// if fractions are proportional to one another
+		// fraction are equal if proportional to one another
 		if rf.num/other.num+rf.num%other.num == rf.den/other.den+rf.den%other.den {
 			return true
 		}
@@ -79,16 +83,16 @@ func (rf *RatFrac) Equals(other *RatFrac) bool {
 	return false
 }
 
-func (rf *RatFrac) Sign() int {
+func (rf *Frac) Sign() int {
 	return rf.sign
 }
 
-func (rf *RatFrac) Neg() (self *RatFrac) {
+func (rf *Frac) Neg() (self *Frac) {
 	rf.sign *= -1
 	return rf
 }
 
-func (rf *RatFrac) Add(other *RatFrac) (self *RatFrac) {
+func (rf *Frac) Add(other *Frac) (self *Frac) {
 	if rf.Err != nil {
 		return
 	}
@@ -118,7 +122,7 @@ func (rf *RatFrac) Add(other *RatFrac) (self *RatFrac) {
 	return rf
 }
 
-func (rf *RatFrac) Sub(other *RatFrac) (self *RatFrac) {
+func (rf *Frac) Sub(other *Frac) (self *Frac) {
 	if rf.Err != nil {
 		return rf
 	}
@@ -144,15 +148,15 @@ func (rf *RatFrac) Sub(other *RatFrac) (self *RatFrac) {
 	return rf
 }
 
-func (rf *RatFrac) Mul(other *RatFrac) (self *RatFrac) {
+func (rf *Frac) Mul(other *Frac) (self *Frac) {
 	if rf.Err != nil {
 		return rf
 	}
 
 	if rf.sign == other.sign {
-		rf.sign = SIGN_POS
+		rf.sign = POS
 	} else {
-		rf.sign = SIGN_NEG
+		rf.sign = NEG
 	}
 
 	rf.num = rf.mul(rf.num, other.num)
@@ -161,7 +165,7 @@ func (rf *RatFrac) Mul(other *RatFrac) (self *RatFrac) {
 	return rf
 }
 
-func (rf *RatFrac) Div(other *RatFrac) (self *RatFrac) {
+func (rf *Frac) Div(other *Frac) (self *Frac) {
 	if rf.Err != nil {
 		return rf
 	}
@@ -172,9 +176,9 @@ func (rf *RatFrac) Div(other *RatFrac) (self *RatFrac) {
 	}
 
 	if rf.sign == other.sign {
-		rf.sign = SIGN_POS
+		rf.sign = POS
 	} else {
-		rf.sign = SIGN_NEG
+		rf.sign = NEG
 	}
 
 	rf.num = rf.mul(rf.num, other.den)
@@ -183,10 +187,10 @@ func (rf *RatFrac) Div(other *RatFrac) (self *RatFrac) {
 	return rf
 }
 
-func (rf *RatFrac) String() string {
+func (rf *Frac) String() string {
 	format := "%d/%d"
 
-	if rf.sign == SIGN_NEG {
+	if rf.sign == NEG {
 		format = "-" + format
 	}
 

@@ -13,7 +13,7 @@
 
 # TODO
 05. Store which coefs in `polynomial.Polunomial` are corrupted inside internal error field
-06. Write `polynomial.Polynomial.String()` method. 
+06. Write `polynomial.Polynomial.String()` method. ****
 
 # DONE
 01. Should I check for internal `ratfrac.RatFrac.Err` implicitly inside methods? **YES**

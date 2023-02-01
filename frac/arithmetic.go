@@ -1,4 +1,4 @@
-package ratfrac
+package frac
 
 import (
 	"math/bits"
@@ -10,7 +10,7 @@ import (
 // This is done to keep original value inside `rf` the same
 // instead of corrupting it with invalid value.
 
-func (rf *RatFrac) add(x, y uint64) uint64 {
+func (rf *Frac) add(x, y uint64) uint64 {
 	res, carry := bits.Add64(x, y, 0)
 	if carry != 0 {
 		rf.Err = ErrOverflow
@@ -19,7 +19,7 @@ func (rf *RatFrac) add(x, y uint64) uint64 {
 	return res
 }
 
-func (rf *RatFrac) mul(x, y uint64) uint64 {
+func (rf *Frac) mul(x, y uint64) uint64 {
 	hi, lo := bits.Mul64(x, y)
 	if hi != 0 {
 		rf.Err = ErrOverflow
