@@ -7,8 +7,12 @@ import (
 var (
 	NEG  = -1
 	POS  = 1
-	NULL = New(0, 1, POS)
+	null = New(0, 1, POS)
 )
+
+func NULL() *Frac {
+	return null.Copy()
+}
 
 type Frac struct {
 	sign int
@@ -20,12 +24,20 @@ type Frac struct {
 
 func New(num, den uint64, sign int) *Frac {
 	rf := &Frac{}
+
 	rf.num = num
 	rf.den = den
+	rf.sign = sign
+
+	if num == 0 && sign == NEG {
+		rf.Err = ErrNullIsNonNegative
+		return rf
+	}
 	if den == 0 {
 		rf.Err = ErrNullDiv
+		return rf
 	}
-	rf.sign = sign
+
 	return rf
 }
 
@@ -85,106 +97,6 @@ func (rf *Frac) Equals(other *Frac) bool {
 
 func (rf *Frac) Sign() int {
 	return rf.sign
-}
-
-func (rf *Frac) Neg() (self *Frac) {
-	rf.sign *= -1
-	return rf
-}
-
-func (rf *Frac) Add(other *Frac) (self *Frac) {
-	if rf.Err != nil || other.Err != nil {
-		return
-	}
-
-	// prep
-	gcd := gcd(rf.den, other.den)
-	left := rf.den/gcd + rf.den%gcd
-	right := other.den/gcd + other.den%gcd
-
-	// calculationg denominator in advance
-	rf.den = rf.mul(left, right)
-	rf.den = rf.mul(rf.den, gcd)
-
-	nl := rf.mul(rf.num, right)
-	nr := rf.mul(other.num, left)
-
-	if rf.sign == other.sign {
-		rf.num = rf.add(nl, nr)
-	} else {
-		if nl < nr {
-			nl, nr = nr, nl
-			rf.sign *= -1
-		}
-		rf.num = nl - nr // overflow is impossible since (nl => nr) is guaranteed
-	}
-
-	return rf
-}
-
-func (rf *Frac) Sub(other *Frac) (self *Frac) {
-	if rf.Err != nil || other.Err != nil {
-		return rf
-	}
-
-	// prep
-	gcd := gcd(rf.den, other.den)
-	left := rf.den / gcd
-	right := other.den / gcd
-
-	// calculationg denominator in advance
-	rf.den = rf.mul(left, right)
-	rf.den = rf.mul(rf.den, gcd)
-
-	nl := rf.mul(rf.num, right)
-	nr := rf.mul(other.num, left)
-
-	if nl < nr {
-		nl, nr = nr, nl
-		rf.sign *= -1
-	}
-	rf.num = nl - nr // overflow is impossible since (nl => nr) is guaranteed
-
-	return rf
-}
-
-func (rf *Frac) Mul(other *Frac) (self *Frac) {
-	if rf.Err != nil || other.Err != nil {
-		return rf
-	}
-
-	if rf.sign == other.sign {
-		rf.sign = POS
-	} else {
-		rf.sign = NEG
-	}
-
-	rf.num = rf.mul(rf.num, other.num)
-	rf.den = rf.mul(rf.den, other.den)
-
-	return rf
-}
-
-func (rf *Frac) Div(other *Frac) (self *Frac) {
-	if rf.Err != nil || other.Err != nil {
-		return rf
-	}
-
-	if other.num == 0 {
-		rf.Err = ErrNullDiv
-		return rf
-	}
-
-	if rf.sign == other.sign {
-		rf.sign = POS
-	} else {
-		rf.sign = NEG
-	}
-
-	rf.num = rf.mul(rf.num, other.den)
-	rf.den = rf.mul(rf.den, other.num)
-
-	return rf
 }
 
 func (rf *Frac) String() string {

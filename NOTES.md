@@ -14,6 +14,8 @@
 # TODO
 05. Store which coefs in `polynomial.Polunomial` are corrupted inside internal error field
 06. Write `polynomial.Polynomial.String()` method. ****
+     -- make it more generic somehow to not create more branching due to edge cases
+07. Write tests for operation when `pnom.Polynomial` is empty.
 
 # DONE
 01. Should I check for internal `ratfrac.RatFrac.Err` implicitly inside methods? **YES**
