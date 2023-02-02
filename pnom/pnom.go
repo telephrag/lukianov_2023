@@ -57,7 +57,7 @@ func (p *Polynomial) Equals(other *Polynomial) bool {
 }
 
 func (p *Polynomial) Add(other *Polynomial) (self *Polynomial) {
-	if p.Err != nil {
+	if p.Err != nil || other.Err != nil {
 		return p
 	}
 

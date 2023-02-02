@@ -93,7 +93,7 @@ func (rf *Frac) Neg() (self *Frac) {
 }
 
 func (rf *Frac) Add(other *Frac) (self *Frac) {
-	if rf.Err != nil {
+	if rf.Err != nil || other.Err != nil {
 		return
 	}
 
@@ -123,7 +123,7 @@ func (rf *Frac) Add(other *Frac) (self *Frac) {
 }
 
 func (rf *Frac) Sub(other *Frac) (self *Frac) {
-	if rf.Err != nil {
+	if rf.Err != nil || other.Err != nil {
 		return rf
 	}
 
@@ -149,7 +149,7 @@ func (rf *Frac) Sub(other *Frac) (self *Frac) {
 }
 
 func (rf *Frac) Mul(other *Frac) (self *Frac) {
-	if rf.Err != nil {
+	if rf.Err != nil || other.Err != nil {
 		return rf
 	}
 
@@ -166,7 +166,7 @@ func (rf *Frac) Mul(other *Frac) (self *Frac) {
 }
 
 func (rf *Frac) Div(other *Frac) (self *Frac) {
-	if rf.Err != nil {
+	if rf.Err != nil || other.Err != nil {
 		return rf
 	}
 
