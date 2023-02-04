@@ -164,12 +164,16 @@ func TestMul(t *testing.T) {
 		frac.New(3, 7, frac.NEG),
 		frac.New(1, 2, frac.POS),
 		frac.New(1, 1, frac.POS),
+		frac.NULL(),
 	})
 	sampleRight := New([]*frac.Frac{
 		frac.New(1, 1, frac.NEG),
 		frac.New(3, 1, frac.POS),
 		frac.New(2, 1, frac.NEG),
 		frac.New(1, 1, frac.NEG),
+		frac.NULL(),
+		frac.NULL(),
+		frac.NULL(),
 	})
 	sampleShould := New([]*frac.Frac{
 		frac.New(2, 1, frac.POS),
@@ -181,4 +185,19 @@ func TestMul(t *testing.T) {
 		frac.New(1, 1, frac.NEG),
 	})
 	must(t, "sample", sampleShould, sampleLeft.Mul(sampleRight))
+}
+
+func TestMulByK(t *testing.T) {
+	sample := New([]*frac.Frac{
+		frac.NULL(),
+		frac.New(1, 2, frac.POS),
+		frac.New(3, 8, frac.NEG),
+		frac.NULL(),
+	})
+	sampleShould := New([]*frac.Frac{
+		frac.NULL(),
+		frac.New(2, 2, frac.POS),
+		frac.New(3, 4, frac.NEG),
+	})
+	must(t, "sample", sampleShould, sample.MullByK(frac.New(2, 1, frac.POS)))
 }

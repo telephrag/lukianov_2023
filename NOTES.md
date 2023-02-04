@@ -13,6 +13,10 @@
 
 # TODO
 07. Write tests for operation when `pnom.Polynomial` is empty.
+08. Work on naming.
+09. Write comments.
+10. Think weather calling `pnom.Pnom.Copy()` and `pnom.Pnom.RemoveTrailingZeros()`
+    should be responsobility of the user.
 
 # DONE
 01. Should I check for internal `ratfrac.RatFrac.Err` implicitly inside methods? **YES**

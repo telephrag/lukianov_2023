@@ -104,3 +104,10 @@ func (p *Pnom) Mul(other *Pnom) (self *Pnom) {
 
 	return p
 }
+
+func (p *Pnom) MullByK(k *frac.Frac) (self *Pnom) {
+	for i := range p.RemoveTrailingNulls().coefs {
+		p.coefs[i].Mul(k)
+	}
+	return p
+}
