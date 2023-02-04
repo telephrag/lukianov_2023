@@ -112,3 +112,7 @@ func (rf *Frac) String() string {
 
 	return fmt.Sprintf(format, rf.num, rf.den)
 }
+
+func (rf *Frac) Float() float64 {
+	return float64(rf.num) / float64(rf.den) * float64(rf.sign)
+}

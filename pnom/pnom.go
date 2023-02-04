@@ -2,6 +2,7 @@ package pnom
 
 import (
 	"lukianov_2023/frac"
+	"math"
 )
 
 type Pnom struct {
@@ -56,4 +57,17 @@ func (p *Pnom) At(index int) *frac.Frac {
 		return p.coefs[index]
 	}
 	return frac.NULL().Copy()
+}
+
+func (p *Pnom) Calc(x float64) (float64, error) {
+	if p.Err != nil {
+		return 0, p.Err
+	}
+
+	res := 0.0
+	for i, c := range p.coefs {
+		res += c.Float() * math.Pow(x, float64(i))
+	}
+
+	return res, nil
 }

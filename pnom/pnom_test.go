@@ -201,3 +201,14 @@ func TestMulByK(t *testing.T) {
 	})
 	must(t, "sample", sampleShould, sample.MullByK(frac.New(2, 1, frac.POS)))
 }
+
+func TestCalc(t *testing.T) {
+	if res, err := New([]*frac.Frac{
+		frac.New(1, 2, frac.POS),
+		frac.New(7, 1, frac.NEG),
+		frac.New(2, 4, frac.POS),
+		frac.New(9, 9, frac.POS),
+	}).Calc(1.6); res != -5.324 || err != nil {
+		t.Fatalf("expected result to be -6.324; got: %f; %s", res, err)
+	}
+}
