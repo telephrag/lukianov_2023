@@ -9,12 +9,14 @@ var superscripts = [10]string{
 func getXToPow(n int) string {
 	var output string
 
+	nn := n != 0
+
 	for n > 1 {
 		output = superscripts[n%10] + output
 		n = n / 10
 	}
 
-	if n != 0 {
+	if nn {
 		output = "x" + output
 	}
 

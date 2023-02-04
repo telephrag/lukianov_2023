@@ -5,16 +5,13 @@
 у числителя и знаменателя нет общих делителей; т.е. взаимно простые). 
 
 Операции: 
-    1) Сложение полиномов
+    1) Сложение полиномов **DONE**
     2) Умножение полиномов
-    3) Вычитание полиномов
+    3) Вычитание полиномов **DONE**
     4) Умножение полинома на рациональное число
     5) Вычисление полинома в точке
 
 # TODO
-05. Store which coefs in `polynomial.Polunomial` are corrupted inside internal error field
-06. Write `polynomial.Polynomial.String()` method. ****
-     -- make it more generic somehow to not create more branching due to edge cases
 07. Write tests for operation when `pnom.Polynomial` is empty.
 
 # DONE
@@ -24,3 +21,6 @@
 03. Fuck it. Let's just force user to make a copy if he suspects error incoming. **Y E S**
     Am I right? Also, fuck implicit allocations.
 04. Depricate `ratfrac.RatFracErr`? **YES**
+05. Store which coefs in `polynomial.Polunomial` are corrupted inside internal error field. **nah, to much at this point**
+06. Write `polynomial.Polynomial.String()` method. **DONE**
+     -- make it more generic somehow to not create more branching due to edge cases

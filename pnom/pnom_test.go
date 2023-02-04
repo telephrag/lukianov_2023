@@ -16,6 +16,22 @@ func must(t *testing.T, location string, should, is *Pnom) {
 	}
 }
 
+func TestRemoveTrailingNulls(t *testing.T) {
+	p := New([]*frac.Frac{
+		frac.New(1, 1, frac.NEG),
+		frac.NULL(),
+		frac.New(1, 1, frac.POS),
+		frac.NULL(),
+		frac.NULL(),
+		frac.NULL(),
+		frac.NULL(),
+	}).RemoveTrailingNulls()
+
+	if p.len() != 3 {
+		t.Fatalf("expected p.Len() to be 3; got: %d\n", p.len())
+	}
+}
+
 func TestEquals(t *testing.T) {
 	p0 := New([]*frac.Frac{
 		frac.New(1, 2, frac.POS),
@@ -140,4 +156,29 @@ func TestSub(t *testing.T) {
 		frac.NULL(),
 	})
 	must(t, "complex", complexShould, complexLeft.Sub(complexRigth))
+}
+
+func TestMul(t *testing.T) {
+	sampleLeft := New([]*frac.Frac{
+		frac.New(2, 1, frac.NEG),
+		frac.New(3, 7, frac.NEG),
+		frac.New(1, 2, frac.POS),
+		frac.New(1, 1, frac.POS),
+	})
+	sampleRight := New([]*frac.Frac{
+		frac.New(1, 1, frac.NEG),
+		frac.New(3, 1, frac.POS),
+		frac.New(2, 1, frac.NEG),
+		frac.New(1, 1, frac.NEG),
+	})
+	sampleShould := New([]*frac.Frac{
+		frac.New(2, 1, frac.POS),
+		frac.New(39, 7, frac.NEG),
+		frac.New(31, 14, frac.POS),
+		frac.New(47, 14, frac.POS),
+		frac.New(17, 7, frac.POS),
+		frac.New(5, 2, frac.NEG),
+		frac.New(1, 1, frac.NEG),
+	})
+	must(t, "sample", sampleShould, sampleLeft.Mul(sampleRight))
 }

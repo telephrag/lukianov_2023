@@ -23,24 +23,23 @@ func (p *Pnom) Copy() (other *Pnom) {
 	return &Pnom{coefs: copiedCoefs}
 }
 
+// Returns true length of `p` after removing trailing nulls.
 func (p *Pnom) Len() int {
-	tail := 0
-	for i := len(p.coefs) - 1; i >= 0; i-- {
-		if p.coefs[i].Equals(frac.NULL()) {
-			tail++
-		} else {
-			break
-		}
-	}
-	return len(p.coefs) - tail
+	return p.RemoveTrailingNulls().len()
+}
+
+func (p *Pnom) len() int {
+	return len(p.coefs)
 }
 
 func (p *Pnom) Equals(other *Pnom) bool {
-	if p.Len() != other.Len() {
+	p.RemoveTrailingNulls()
+	other.RemoveTrailingNulls()
+	if p.len() != other.len() {
 		return false
 	}
 
-	if p.Len() == 0 {
+	if p.len() == 0 {
 		return true
 	}
 
