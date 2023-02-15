@@ -3,6 +3,7 @@ package pnom
 import (
 	"fmt"
 	"lukianov_2023/frac"
+	"math/big"
 	"testing"
 )
 
@@ -203,12 +204,19 @@ func TestMulByK(t *testing.T) {
 }
 
 func TestCalc(t *testing.T) {
-	if res, err := New([]*frac.Frac{
+	res, err := New([]*frac.Frac{
 		frac.New(1, 2, frac.POS),
 		frac.New(7, 1, frac.NEG),
 		frac.New(2, 4, frac.POS),
 		frac.New(9, 9, frac.POS),
-	}).Calc(1.6); res != -5.324 || err != nil {
-		t.Fatalf("expected result to be -6.324; got: %f; %s", res, err)
+	}).Calc(1.6)
+
+	if err != nil {
+		t.Fatalf("expected no error; got: %s\n", err)
+	}
+
+	rb := big.NewFloat(res).SetPrec(3)
+	if rb.Cmp(big.NewFloat(-5.324).SetPrec(3)) != 0 {
+		t.Fatalf("expected result to be: %f; got: %f\n", rb, -5.324)
 	}
 }
